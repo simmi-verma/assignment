@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard - Assignment for Quadiro Technologies</title>
+</head>
+<body>
+    <h1>Dashboard - Assignment for Quadiro Technologies</h1>
+    <ul id="carList"></ul>
+    <script>
+        async function fetchCars() {
+            const token = localStorage.getItem('token'); // Ensure the token is available
+
+            try {
+                const response = await fetch('/admin/cars', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const cars = await response.json();
+                    const carList = document.getElementById('carList');
+                    carList.innerHTML = '';
+                    cars.forEach(car => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = `${car.name} - ${car.year} - $${car.price}`;
+                        carList.appendChild(listItem);
+                    });
+                } else {
+                    alert('Failed to fetch cars');
+                }
+            } catch (error) {
+                console.error('Error fetching cars:', error);
+                alert('An error occurred while fetching cars');
+            }
+        }
+
+        fetchCars(); // Fetch cars when the page loads
+    </script>
+</body>
+</html>
